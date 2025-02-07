@@ -8,6 +8,17 @@ The methodology begins with data preprocessing, including tokenization, removal 
 
 Evaluation on the test dataset yielded robust performance, with metrics such as accuracy, precision, recall, and F1-score confirming the system's effectiveness. The spam detection system achieves precise identification of spam messages while minimizing false positives and negatives, providing users with a reliable tool for managing unwanted messages.
 
+# Code :
+
+First of all I install all the libraries in requirements.txt
+
+    streamlit
+    scikit-learn
+    numpy
+    pandas
+    scipy
+
+
 Model Workflow : 
 
 ![image](https://github.com/user-attachments/assets/ba78ac71-c5dc-46e1-865b-e58633884bcb)
