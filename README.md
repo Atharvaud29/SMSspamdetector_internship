@@ -10,13 +10,83 @@ Evaluation on the test dataset yielded robust performance, with metrics such as 
 
 # Code :
 
-First of all I install all the libraries in requirements.txt
+First of all I install all the libraries and dependency required for the project
 
     streamlit
     scikit-learn
     numpy
     pandas
     scipy
+    pickle
+    tkinter
+
+Data Pre-processing :
+
+We drop the columns which contains NaN values in dataset
+
+    data.drop(['Unnamed: 2', 'Unnamed: 3', 'Unnamed: 4'], axis=1, inplace=True)
+
+Then give the class columns values as Ham and Spam
+ 
+    data['class'] = data['class'].map({'ham': 0, 'spam': 1})
+
+Import Vectorizer and Split the data into train & test datasets
+
+    from sklearn.feature_extraction.text import CountVectorizer
+    from sklearn.model_selection import train_test_split
+
+    X=data['message']
+    y=data['class']
+
+Then use fit transform and create training and testing subsets
+
+    cv=CountVectorizer()
+    X=cv.fit_transform(X)
+    x_train, x_test,y_train, y_test=train_test_split(X,y, test_size=0.2, random_state=42)
+
+From naive bayes use MultinomialNB model
+    
+    from sklearn.naive_bayes import MultinomialNB
+    model=MultinomialNB()
+    model.fit(x_train, y_train)
+
+Then find the Score of model
+
+    model.score(x_test, y_test)
+
+The Score of the model is --> 0.97847533632287
+
+# Then to convent this code into an Streamlit application :
+
+First import the libraries
+     
+    import streamlit as st
+    import pickle
+
+Then load the pickle file which are spam.pkl & vectorizer.pkl
+
+    model = pickle.load(open('spam.pkl','rb'))
+    cv = pickle.load(open('vectorizer.pkl','rb'))
+
+Give the title and subtitle of the application
+
+    st.title("Email Spam Classification Application")
+    st.write("This is a Machine Learning application to classify email as spam or ham.")
+    user_input = st.text_area("Enter an email to classify",height=150)
+
+Create the Classify button and show the output of the massage
+
+    if st.button("Classify"):
+        if user_input:
+            data = [user_input]
+            vectorized_data = cv.transform(data).toarray()
+            result = model.predict(vectorized_data)
+            if result[0] == 0:
+                st.write("The email is Not Spam")
+            else:
+                st.write("The email is Spam")
+        else:
+            st.write("Please type Email to classify")
 
 
 Model Workflow : 
